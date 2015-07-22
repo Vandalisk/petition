@@ -28,6 +28,8 @@ gem "therubyracer"
 gem "less-rails"
 gem "twitter-bootstrap-rails"
 
+gem 'devise'
+
 gem 'powder'
 
 group :development, :test do
