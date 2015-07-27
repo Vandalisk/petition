@@ -1,0 +1,2 @@
+module PetitionEntityHelper
+end
