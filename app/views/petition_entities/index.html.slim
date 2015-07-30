@@ -1,7 +1,35 @@
-h1 PetitionEntities
-- @petition_entities.each do |petition|
-  .petition
-    = petition.id
-    = petition.title
-    = petition.description
-    = petition.votes
+- model_class = PetitionEntity
+.page-header
+  h1= 'Petitions'
+table.table.table-striped
+  thead
+    tr
+      th= model_class.human_attribute_name(:id)
+      th= model_class.human_attribute_name(:title)
+      th= model_class.human_attribute_name(:description)
+      th= model_class.human_attribute_name(:votes)
+      th= model_class.human_attribute_name(:user_id)
+      th= "Url"
+      th=t '.actions', default: t('helpers.actions')
+  tbody
+    - @petition_entities.each do |petition_entity|
+      tr
+        td= link_to petition_entity.id, petition_entity_path(petition_entity)
+        td= link_to petition_entity.title, petition_entity_path(petition_entity)
+        td= link_to petition_entity.description, petition_entity_path(petition_entity)
+        td= link_to petition_entity.votes.count, petition_entity_path(petition_entity)
+        td= link_to petition_entity.user.fio, petition_entity_path(petition_entity) if petition_entity.user.present?
+        td= link_to "#{request.original_url}/#{petition_entity.id}", petition_entity_path(petition_entity)
+        td
+          - if petition_entity.votes.include? (current_user.fio)
+            = 'voted'
+          - else
+            = link_to 'subscribe', subscribe_petition_path(petition_entity)
+          '
+          = link_to t('.edit', default: t('helpers.links.edit')), edit_petition_entity_path(petition_entity), class: 'btn btn-default btn-xs'
+          '
+          = link_to t('.destroy', default: t('helpers.links.destroy')), petition_entity_path(petition_entity), method: :delete,
+              data: { confirm: t('.confirm', default: t('helpers.links.confirm', default: 'Are you sure?')) },
+              class: 'btn btn-xs btn-danger'
+
+= link_to t('.new', default: t('helpers.links.new')), new_petition_entity_path, class: 'btn btn-primary'
